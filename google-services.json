@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "690959688562",
+    "firebase_url": "https://medalert-fd67a.firebaseio.com",
+    "project_id": "medalert-fd67a",
+    "storage_bucket": "medalert-fd67a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:690959688562:android:764d2cb7da3280eb",
+        "android_client_info": {
+          "package_name": "io.ionic.starter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "690959688562-19lrjcj628cm80b91ca8tdv17js201ji.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.ionic.starter",
+            "certificate_hash": "6bae7f54a30d8ac63061f1070e64c8bdd648185c"
+          }
+        },
+        {
+          "client_id": "690959688562-067djvtm6sp6f9a75lu64a6fhj7m7bin.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyqrMWJu-y6dcRypaer5zHL269rtoJMDc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "690959688562-067djvtm6sp6f9a75lu64a6fhj7m7bin.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
