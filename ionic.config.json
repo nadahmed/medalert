@@ -1,6 +1,8 @@
 {
   "name": "MedAlert",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular",
   "id": "f9ac1aa2"
 }
