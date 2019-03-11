@@ -1,3 +1,5 @@
+import { AuthService } from './services/user/auth.service';
+import { AuthGuard } from './services/user/auth.guard';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -7,7 +9,8 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import * as firebase from 'firebase';
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
 import { AngularFireModule } from 'angularfire2'
 import { AngularFireAuthModule } from 'angularfire2/auth'
 
@@ -20,6 +23,7 @@ export const firebaseConfig = {
     messagingSenderId: "690959688562"
 }
 
+firebase.initializeApp(firebaseConfig);
 
 @NgModule({
   declarations: [AppComponent],
@@ -29,13 +33,16 @@ export const firebaseConfig = {
       IonicModule.forRoot(),
       AppRoutingModule,
       AngularFireModule.initializeApp(firebaseConfig),
+      
       AngularFireAuthModule,
     ],
   providers: [
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
-    GooglePlus
+    GooglePlus,
+    AuthGuard,
+    AuthService,
   ],
   bootstrap: [AppComponent]
 })

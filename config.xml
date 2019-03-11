@@ -88,4 +88,7 @@
     </plugin>
     <plugin name="cordova-plugin-firebase" spec="2.0.5" />
     <engine name="android" spec="~7.1.4" />
+    <plugin name="cordova-plugin-firebase-authentication" spec="1.1.2">
+        <variable name="FIREBASE_AUTH_VERSION" value="16.1.+" />
+    </plugin>
 </widget>

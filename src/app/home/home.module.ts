@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { HomePage } from './home.page';
+import { OptionComponent } from '../settings/option/option.component';
 
 @NgModule({
   imports: [
@@ -18,6 +19,8 @@ import { HomePage } from './home.page';
       }
     ])
   ],
-  declarations: [HomePage]
+  declarations: [HomePage, OptionComponent],
+  entryComponents: [OptionComponent],
+  
 })
 export class HomePageModule {}

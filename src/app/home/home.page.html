@@ -1,12 +1,27 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
+        
+        <ion-item  lines="none">
+                <ion-avatar slot="start">
+                  <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+                </ion-avatar>
+                <ion-label>Mr. John Smith</ion-label>
+                
+              </ion-item>
+              <ion-button fill='clear' slot='end' shape='round' (click)='presentPopover($event)'><ion-icon slot="icon-only" name="more"></ion-icon></ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>If you get lost, the <a target="_blank" rel="noopener" href="https://ionicframework.com/docs/">docs</a> will be your guide.</p>
+        <ion-avatar vertical="top" horizontal="center" slot="fixed">
+                <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+              </ion-avatar>
+    <ion-list>
+        <ion-item *ngFor="let entry of form">
+          <ion-label>{{entry.val}}</ion-label>
+          <ion-checkbox slot='start' [(ngModel)]="entry.isChecked"></ion-checkbox>
+        </ion-item>
+      </ion-list>
+      
+        <ion-fab  vertical="bottom" horizontal="end" slot='fixed' ><ion-fab-button href='/entries' routerDirection='forward'><ion-icon name="add"></ion-icon></ion-fab-button></ion-fab>
 </ion-content>
