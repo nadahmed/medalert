@@ -3,10 +3,60 @@
         <ion-buttons slot='start'>
             <ion-back-button defaultHref='/home'></ion-back-button>
         </ion-buttons>
-    <ion-title>Entries</ion-title>
+    <ion-title>Add medicine entries</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
+    <ion-list-header>
+        <ion-label>
+          Name your medicine
+        </ion-label>
+        </ion-list-header>
+    <ion-item>
+        <ion-input></ion-input>
+      </ion-item>
 
+      <!-- Datetime -->
+      
+      <ion-list-header>
+        <ion-label>
+          Pick your reminders
+        </ion-label>
+        </ion-list-header>
+     
+
+
+      <ion-item>
+        <ion-label>Time 1</ion-label>
+        <ion-datetime displayFormat="h:mm A" minuteValues="0,15,30,45" value="01:15"></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label>Time 2</ion-label>
+        <ion-datetime displayFormat="h:mm A" minuteValues="0,15,30,45" value="01:15"></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label>Time 3</ion-label>
+        <ion-datetime displayFormat="h:mm A" minuteValues="0,15,30,45" value="01:15"></ion-datetime>
+      </ion-item>
+      <ion-button size="small" fill='clear' color='dark' expand="block"><ion-icon slot="icon-only" name="add-circle"></ion-icon></ion-button>
+    
+      <ion-item>
+        <ion-label>Snooze every</ion-label>
+        <p slot='end' (click)='snoozeTime()'><a [innerText]='2'></a><small> minutes</small></p>
+      </ion-item>
+      <!-- Datetime -->
+
+      <ion-list-header>
+        <ion-label>
+          Notes
+        </ion-label>
+        </ion-list-header>
+        
+        <ion-item>
+           
+            <ion-textarea rows="4" cols="20" placeholder="Enter any notes here..."></ion-textarea>
+          </ion-item>
+      
+     
 </ion-content>

@@ -1,3 +1,4 @@
+import { AuthService } from './../services/user/auth.service';
 import { Platform, LoadingController, AlertController } from '@ionic/angular';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Component, OnInit } from '@angular/core';
@@ -26,10 +27,12 @@ export class LoginPage implements OnInit {
         private loadingController:LoadingController,
         public router:Router,
         public alertController: AlertController,
+        private authService:AuthService,
         ) { }
 
-ngOnInit() {
-      
+async ngOnInit() {
+      let myState=await this.authService.authenticated();
+      if (myState){this.router.navigate(['/home']);}
   }
 
   async presentAlert(mess:string) {
