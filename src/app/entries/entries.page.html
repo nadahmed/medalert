@@ -1,62 +1,59 @@
 <ion-header>
-  <ion-toolbar>
+    <ion-toolbar>
         <ion-buttons slot='start'>
             <ion-back-button defaultHref='/home'></ion-back-button>
         </ion-buttons>
-    <ion-title>Add medicine entries</ion-title>
-  </ion-toolbar>
+        <ion-title>Add medicine entries</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
+        <form  (ngSubmit)="save()" >
+    <ion-item>
+        <ion-label position='floating'>
+            Name of your medicine
+        </ion-label>
+    
+        <ion-input name='name' [(ngModel)]="medicine.name"></ion-input>
+    
+    </ion-item>
+    <br>
+
+    <!-- Datetime -->
+
     <ion-list-header>
         <ion-label>
-          Name your medicine
+            PICK YOUR REMINDERS
         </ion-label>
-        </ion-list-header>
-    <ion-item>
-        <ion-input></ion-input>
-      </ion-item>
+    </ion-list-header>
 
-      <!-- Datetime -->
-      
-      <ion-list-header>
-        <ion-label>
-          Pick your reminders
-        </ion-label>
-        </ion-list-header>
-     
+    <ion-item  *ngFor="let time of medicine.time; let i =index">
+        <ion-label>Time {{i+1}}: </ion-label>
+        <ion-datetime name= "{{'datetime'+ i+1}}" displayFormat="h:mm A" minuteValues="0,15,30,45" [(ngModel)]='time'></ion-datetime>
+    </ion-item>
 
+    <ion-button size="small" fill='clear' color='dark' expand="block" (click)='addTime()'>
+        <ion-icon slot="icon-only" name="add"></ion-icon>Add more
+    </ion-button>
 
-      <ion-item>
-        <ion-label>Time 1</ion-label>
-        <ion-datetime displayFormat="h:mm A" minuteValues="0,15,30,45" value="01:15"></ion-datetime>
-      </ion-item>
-      <ion-item>
-        <ion-label>Time 2</ion-label>
-        <ion-datetime displayFormat="h:mm A" minuteValues="0,15,30,45" value="01:15"></ion-datetime>
-      </ion-item>
-      <ion-item>
-        <ion-label>Time 3</ion-label>
-        <ion-datetime displayFormat="h:mm A" minuteValues="0,15,30,45" value="01:15"></ion-datetime>
-      </ion-item>
-      <ion-button size="small" fill='clear' color='dark' expand="block"><ion-icon slot="icon-only" name="add-circle"></ion-icon></ion-button>
+    <ion-item lines="none">
+        <ion-label>Snooze</ion-label>
+        <ion-input class='snooze' text-right inputmode="numeric" (click)='snoozeTime()' name='snooze' [(ngModel)]="medicine.snooze" readonly></ion-input>
+        <!-- <p slot='end' name= 'snooze' (click)='snoozeTime()'>{{medicine.snooze}}<small> minutes</small></p> -->
+    </ion-item>
     
-      <ion-item>
-        <ion-label>Snooze every</ion-label>
-        <p slot='end' (click)='snoozeTime()'><a [innerText]='2'></a><small> minutes</small></p>
-      </ion-item>
-      <!-- Datetime -->
+    <!-- Datetime -->
 
-      <ion-list-header>
+    <ion-list-header>
         <ion-label>
-          Notes
+            NOTES
         </ion-label>
-        </ion-list-header>
-        
-        <ion-item>
-           
-            <ion-textarea rows="4" cols="20" placeholder="Enter any notes here..."></ion-textarea>
-          </ion-item>
-      
-     
+    </ion-list-header>
+
+    <ion-item>
+        <ion-textarea name = 'notes' rows="3" cols="20" placeholder="Enter any notes here..." [(ngModel)]='medicine.notes'></ion-textarea>
+    </ion-item>
+
+    <ion-button expand='block' type='submit' (click)='save()'>Save</ion-button>
+</form>
 </ion-content>

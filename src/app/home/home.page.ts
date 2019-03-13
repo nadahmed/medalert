@@ -1,22 +1,26 @@
-import { Component, OnDestroy } from '@angular/core';
+import { MedicinesService } from './medicines.service';
+import { Medicines } from './medicines.interface';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OptionComponent } from '../settings/option/option.component';
 import { PopoverController } from '@ionic/angular';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage implements OnDestroy{
-    public form = [
-        { val: 'Paracetamol', isChecked: true },
-        { val: 'Asprin', isChecked: false },
-        { val: 'Pain killer', isChecked: false },
-        { val: 'Anti-biotics', isChecked: false }
-      ];
+export class HomePage implements OnDestroy, OnInit{
+    
+    
+      constructor(public popoverController:PopoverController, public router:Router, public medicineService:MedicinesService){
 
-      constructor(public popoverController:PopoverController){
-
+      }
+    form:Medicines[];
+    
+async ngOnInit(){
+        this.form = await this.medicineService.getMedicines()
       }
 
       ngOnDestroy(){
@@ -30,5 +34,18 @@ export class HomePage implements OnDestroy{
           translucent: false
         });
         return await popover.present();
+      }
+
+      edit(entry){
+            this.router.navigate(['/entries/'+entry.id]);
+      }
+
+      toggle(entry){
+          console.log(this.form[entry.id-1]);
+          this.medicineService.form[entry.id-1].isChecked = entry.isChecked;
+      }
+
+      fabButton(){
+          this.router.navigate(['/entries/'+(this.form.length+1)]);
       }
 }

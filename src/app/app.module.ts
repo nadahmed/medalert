@@ -1,3 +1,4 @@
+import { MedicinesService } from './home/medicines.service';
 import { AuthService } from './services/user/auth.service';
 import { AuthGuard } from './services/user/auth.guard';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
@@ -43,6 +44,7 @@ firebase.initializeApp(firebaseConfig);
     GooglePlus,
     AuthGuard,
     AuthService,
+    MedicinesService,
   ],
   bootstrap: [AppComponent]
 })

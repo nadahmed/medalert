@@ -1,27 +1,34 @@
 <ion-header>
-  <ion-toolbar>
-        
-        <ion-item  lines="none">
-                <ion-avatar slot="start">
-                  <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-                </ion-avatar>
-                <ion-label>Mr. John Smith</ion-label>
-                
-              </ion-item>
-              <ion-button fill='clear' slot='end' shape='round' (click)='presentPopover($event)'><ion-icon slot="icon-only" name="more"></ion-icon></ion-button>
-  </ion-toolbar>
+    <ion-toolbar>
+
+        <ion-item lines="none">
+            <ion-avatar slot="start">
+                <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+            </ion-avatar>
+            <ion-label>Mr. John Smith</ion-label>
+
+        </ion-item>
+        <ion-button fill='clear' slot='end' color='dark' shape='round' (click)='presentPopover($event)'>
+            <ion-icon slot="icon-only" name="more"></ion-icon>
+        </ion-button>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-        <ion-avatar vertical="top" horizontal="center" slot="fixed">
-                <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-              </ion-avatar>
+    <ion-avatar vertical="top" horizontal="center" slot="fixed">
+        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+    </ion-avatar>
     <ion-list>
-        <ion-item *ngFor="let entry of form">
-          <ion-label>{{entry.val}}</ion-label>
-          <ion-checkbox slot='start' [(ngModel)]="entry.isChecked"></ion-checkbox>
-        </ion-item>
-      </ion-list>
-      
-        <ion-fab  vertical="bottom" horizontal="end" slot='fixed' ><ion-fab-button href='/entries' routerDirection='forward'><ion-icon name="add"></ion-icon></ion-fab-button></ion-fab>
+        
+            <ion-item *ngFor="let entry of form">
+                <ion-toggle [(ngModel)] = 'entry.isChecked' (ionChange)='toggle(entry)'></ion-toggle>
+                <ion-label>{{entry.name}}</ion-label>
+                <ion-button slot='end' fill='clear' color='dark' (click)='edit(entry)'><ion-icon slot='icon-only' name="create"></ion-icon></ion-button>
+            </ion-item>
+    </ion-list>
+    <ion-fab vertical="bottom" horizontal="end" slot='fixed'>
+        <ion-fab-button (click)='fabButton()'>
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
 </ion-content>
