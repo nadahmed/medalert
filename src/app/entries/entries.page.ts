@@ -4,8 +4,6 @@ import { Component, OnInit } from '@angular/core';
 import { PickerController } from '@ionic/angular';
 import { PickerButton, PickerColumn, PickerColumnOption } from '@ionic/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { stringify } from '@angular/compiler/src/util';
 
 @Component({
     selector: 'app-entries',
@@ -25,72 +23,84 @@ export class EntriesPage implements OnInit {
     id: string;
     medicines: Medicines[];
     pb: PickerButton[];
-    medicine: Medicines = { id: 1, name: 'None', isChecked: true, time: ['12:00'], snooze: 2, notes: 'Null' };
-    picker:HTMLIonPickerElement;
+    medicine: Medicines = { id: 1, name: '', isChecked: true, time: [], snooze: 2, notes: '' };
+    picker: HTMLIonPickerElement;
 
     async ngOnInit() {
-        this.medicines = [];
+        //this.medicines = [];
         this.id = await this.activatedRoute.snapshot.paramMap.get('id');
+        this.medicine.id=parseInt(this.id);
         await this.medicineService.getMedicines()
             .then(res => {
-                this.medicines = res;
-                this.medicine = this.medicines.map(item => Object.assign({}, item))[parseInt(this.id) - 1];
+                if (res.length >= parseInt(this.id)) {
+
+
+                    this.medicines = res;
+
+                    this.medicine = this.medicines.map(item => Object.assign({}, item))[parseInt(this.id) - 1];
+                    console.log(this.medicines);
+                    this.medicine.time.map(item => { item = Object.assign({}, item) });
+                    this.medicine.time = this.medicine.time.map(item => {
+                        return item;
+                    });
+                    console.log(this.medicine.time);
+                }
+            }
+
+            ).catch(() => {
+                console.log();
             });
-        this.selection = this.medicine.snooze-1;
+        this.selection = this.medicine.snooze - 1;
+
     }
 
-    addTime(){
+    addTime() {
+        let d = new Date();
+        let hours = d.getHours();
+        let minutes = d.getMinutes();
+        let hoursString: string = hours.toString();
+        let minutesString: string = minutes.toString();
 
- 
-    let d= new Date();
-    let hours = d.getHours();
-    let minutes = d.getMinutes();
-    let hoursString:string = hours.toString();
-    let minutesString:string = minutes.toString();
+        if (hours < 10) { hoursString = "0" + hoursString; }
+        if (minutes < 10) { minutesString = "0" + minutesString; }
 
-    if (hours   < 10) {hoursString   = "0"+hoursString;}
-    if (minutes < 10) {minutesString = "0"+minutesString;}
-    
-        
-        this.medicine.time.push(hoursString+':'+minutesString);
-        console.log(hoursString+':'+ minutesString);
+        this.medicine.time.push(hoursString + ':' + minutesString);
+        console.log(hoursString + ':' + minutesString);
     }
+
     register(form) {
         console.log(form);
     }
 
     async snoozeTime() {
-        this.picker= await this.pickerController.create({
+        this.picker = await this.pickerController.create({
             buttons: [{
                 text: 'Done',
-                handler: ()=>{this.pickerHandler(); return true}
+                handler: () => { this.pickerHandler(); return true }
             }],
             columns: this.pickerOpts()
         })
-            await this.picker.present();
-            this.picker.onDidDismiss().then(()=>{
-                this.picker.getColumn('snooze')
+        await this.picker.present();
+        this.picker.onDidDismiss().then(() => {
+            this.picker.getColumn('snooze')
                 .then((res) => {
                     console.log(res);
-
                     console.log(res.selectedIndex);
-                    if (this.donePressed){
+                    if (this.donePressed) {
                         this.medicine.snooze = res.options[res.selectedIndex].value;
-                        this.donePressed=false;
-                        this.selection=res.selectedIndex;
+                        this.donePressed = false;
+                        this.selection = res.selectedIndex;
                     }
                 })
-                .catch(e=>{
+                .catch(e => {
                     console.error(e);
                 });
-            
         });
-    
     }
 
     pickerHandler() {
         console.log('done button pressed');
-        this.donePressed=true;
+        this.donePressed = true;
     }
 
     pickerOpts() {

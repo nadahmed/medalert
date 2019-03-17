@@ -23,7 +23,7 @@
 
     <ion-list-header>
         <ion-label>
-            PICK YOUR REMINDERS
+            YOUR REMINDERS
         </ion-label>
     </ion-list-header>
 
@@ -33,7 +33,7 @@
     </ion-item>
 
     <ion-button size="small" fill='clear' color='dark' expand="block" (click)='addTime()'>
-        <ion-icon slot="icon-only" name="add"></ion-icon>Add more
+        <ion-icon slot="icon-only" name="add"></ion-icon>Add
     </ion-button>
 
     <ion-item lines="none">
@@ -54,6 +54,6 @@
         <ion-textarea name = 'notes' rows="3" cols="20" placeholder="Enter any notes here..." [(ngModel)]='medicine.notes'></ion-textarea>
     </ion-item>
 
-    <ion-button expand='block' type='submit' (click)='save()'>Save</ion-button>
+    <ion-button expand='block' type='submit' >Save</ion-button>
 </form>
 </ion-content>
