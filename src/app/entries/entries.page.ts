@@ -1,57 +1,81 @@
+
 import { MedicinesService } from './../home/medicines.service';
-import { Medicines } from './../home/medicines.interface';
-import { Component, OnInit } from '@angular/core';
-import { PickerController } from '@ionic/angular';
+import { Medicine } from './../home/medicines.interface';
+import { Component } from '@angular/core';
+import { PickerController, LoadingController } from '@ionic/angular';
 import { PickerButton, PickerColumn, PickerColumnOption } from '@ionic/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-entries',
     templateUrl: './entries.page.html',
     styleUrls: ['./entries.page.scss'],
 })
-export class EntriesPage implements OnInit {
+export class EntriesPage {
 
     constructor(
         public pickerController: PickerController,
         private activatedRoute: ActivatedRoute,
-        private medicineService: MedicinesService
+        private medicineService: MedicinesService,
+        private loadingController: LoadingController,
+        public router:Router
     ) { }
 
     private donePressed;
     private selection;
+    observable: Subscription;
     id: string;
-    medicines: Medicines[];
+    medicines: Medicine[];
+    times:string[];
     pb: PickerButton[];
-    medicine: Medicines = { id: 1, name: '', isChecked: true, time: [], snooze: 2, notes: '' };
+    medicine: Medicine = { id: '1', name: '', isChecked: true, time: [], snooze: 2, notes: '' };
     picker: HTMLIonPickerElement;
 
-    async ngOnInit() {
-        //this.medicines = [];
-        this.id = await this.activatedRoute.snapshot.paramMap.get('id');
-        this.medicine.id=parseInt(this.id);
-        await this.medicineService.getMedicines()
-            .then(res => {
-                if (res.length >= parseInt(this.id)) {
 
+    async ionViewDidEnter() {
+        
+        let loading = await this.loadingController.create();
+        loading.message = 'Please wait';
 
-                    this.medicines = res;
-
-                    this.medicine = this.medicines.map(item => Object.assign({}, item))[parseInt(this.id) - 1];
-                    console.log(this.medicines);
-                    this.medicine.time.map(item => { item = Object.assign({}, item) });
-                    this.medicine.time = this.medicine.time.map(item => {
-                        return item;
-                    });
+        this.id = this.activatedRoute.snapshot.paramMap.get('id');
+        if ('new' != this.id) {
+            await loading.present();
+            this.observable = this.medicineService.getMedicine(this.id).subscribe(res => {
+                 let obj:Medicine={
+                    id: res.id,
+                    name: res.name,
+                    isChecked: res.isChecked,
+                    time: res.time,
+                    snooze: res.snooze,
+                    notes: res.notes,  
+                 } 
+                 this.medicine = obj;
+            },
+                e => { },
+                async () => {
+                    await loading.dismiss();
+                    this.observable.unsubscribe();
                     console.log(this.medicine.time);
                 }
-            }
+            );
+            this.selection = this.medicine.snooze - 1;
 
-            ).catch(() => {
-                console.log();
-            });
-        this.selection = this.medicine.snooze - 1;
+        }
 
+
+    }
+    selected(ev, index){
+        this.medicine.time[index]=ev.detail.value.toString();
+        //this.medicine.time[index]='01:20';
+        console.log(ev.detail.value);
+        console.log(this.medicine.time);
+      }
+
+    ionViewWillLeave() {
+        if ('new' != this.id) {
+        this.observable.unsubscribe();
+        }
     }
 
     addTime() {
@@ -68,9 +92,6 @@ export class EntriesPage implements OnInit {
         console.log(hoursString + ':' + minutesString);
     }
 
-    register(form) {
-        console.log(form);
-    }
 
     async snoozeTime() {
         this.picker = await this.pickerController.create({
@@ -87,14 +108,11 @@ export class EntriesPage implements OnInit {
                     console.log(res);
                     console.log(res.selectedIndex);
                     if (this.donePressed) {
-                        this.medicine.snooze = res.options[res.selectedIndex].value;
+                        this.medicine.snooze = parseInt(res.options[res.selectedIndex].value);
                         this.donePressed = false;
                         this.selection = res.selectedIndex;
                     }
                 })
-                .catch(e => {
-                    console.error(e);
-                });
         });
     }
 
@@ -123,9 +141,15 @@ export class EntriesPage implements OnInit {
         return columns;
     }
 
-    save() {
+    async save() {
+        let loading = await this.loadingController.create();
+        loading.message = 'Saving';
+        await loading.present();
         console.log(this.medicine);
-        console.log(this.medicines[parseInt(this.id) - 1])
+        console.log(this.medicine.time);
+        await this.medicineService.addMedicine(this.medicine);
+        await loading.dismiss();
+        await this.router.navigate(['/home']);
     }
 }
 

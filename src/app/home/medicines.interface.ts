@@ -1,5 +1,5 @@
-export interface Medicines{
-    id: number,
+export interface Medicine{
+    id: string,
     name: string,
     isChecked: boolean,
     time: string[],

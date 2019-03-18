@@ -3,9 +3,9 @@
 
         <ion-item lines="none">
             <ion-avatar slot="start">
-                <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+                <img [src]="user.photoURL">
             </ion-avatar>
-            <ion-label>Mr. John Smith</ion-label>
+            <ion-label>{{ user.displayName }}</ion-label>
 
         </ion-item>
         <ion-button fill='clear' slot='end' color='dark' shape='round' (click)='presentPopover($event)'>
@@ -15,14 +15,12 @@
 </ion-header>
 
 <ion-content padding>
-    <ion-avatar vertical="top" horizontal="center" slot="fixed">
-        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-    </ion-avatar>
+    
     <ion-list>
         
-            <ion-item *ngFor="let entry of form">
-                <ion-toggle [(ngModel)] = 'entry.isChecked' (ionChange)='toggle(entry)'></ion-toggle>
-                <ion-label>{{entry.name}}</ion-label>
+            <ion-item *ngFor="let entry of medicines; let i = index">
+                <ion-toggle [name]='i' [(ngModel)] = 'entry.isChecked' (ionChange)='toggle(entry)'></ion-toggle>
+                <ion-label >{{entry.name}}</ion-label>
                 <ion-button slot='end' fill='clear' color='dark' (click)='edit(entry)'><ion-icon slot='icon-only' name="create"></ion-icon></ion-button>
             </ion-item>
     </ion-list>

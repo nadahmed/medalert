@@ -1,26 +1,89 @@
-import { Medicines } from './medicines.interface';
+import { AuthService } from './../services/user/auth.service';
+import { Medicine } from './medicines.interface';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import * as firebase from "firebase/app"
+import 'firebase/firestore'
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class MedicinesService {
 
-  constructor() { }
+    constructor(private authService: AuthService) { }
 
-form:Medicines[] = [
-    { id: 1, name: 'Paracetamol', isChecked: true, time: ['12:00', '23:50'], snooze: 8 },
-    { id: 2, name: 'Asprin', isChecked: true, time: ['01:00'], snooze: 3,  },
-    { id: 3, name: 'Pain killer', isChecked: true, time: ['15:00'], snooze: 5},
-    { id: 4, name: 'Anti-biotics', isChecked: true, time: ['16:00'], snooze: 4}
-  ];
+    addMedicine(med: Medicine) {
+        let creds = this.authService.credentials()
+        let db = firebase.firestore();
+        db.collection("users").doc(creds.uid).collection('medicines').doc(med.id.toString()).set(med)
+            .catch(function (error) {
+                console.error("Error adding document: ", error);
+            });
+    }
 
-  getMedicines(){
-      return new Promise<Medicines[]>((resolve,reject)=>{
-            resolve(this.form);
-      });
-  }
+    editMedicine(med: Medicine) {
+        let creds = this.authService.credentials()
+        let db = firebase.firestore();
+        db.collection("users").doc(creds.uid).collection('medicines').doc(med.id.toString()).set(med)
+            .catch(function (error) {
+                console.error("Error adding document: ", error);
+            });
+    }
 
- 
+    defaultMed: Medicine = { id: '1', name: 'Paracetamol', isChecked: true, time: ['12:00', '23:50'], snooze: 8 };
+
+    getMedicine(id: string): Observable<Medicine> {
+
+        let creds = this.authService.credentials()
+        let db = firebase.firestore();
+        let Ref = db.collection('users').doc(creds.uid);
+        return new Observable<Medicine>((observer) => {
+            Ref.get().then(res => {
+
+            }).then(() => {
+                Ref.collection('medicines').doc(id).get().then(data => {
+                    let meds: Medicine = {
+                        id : data.id,
+                        isChecked: data.data().isChecked,
+                        name : data.data().name,
+                        time : data.data().time,
+                        snooze : data.data().snooze,
+                        notes : data.data().notes,
+                };
+                    observer.next(meds);
+                    observer.complete();
+                });
+
+            });
+
+        });
+    }
+
+    getMedicines(): Observable<Medicine[]> {
+
+        let creds = this.authService.credentials();
+        return new Observable<Medicine[]>(observer => {
+            let db = firebase.firestore();
+            let Ref = db.collection('users').doc(creds.uid);
+            Ref.get().then(res => {
+                //console.log(res.data());
+            })
+            Ref.collection('medicines').onSnapshot(res => {
+                let medicines: Medicine[] = [];
+                res.forEach(data => {
+                    let meds: Medicine = {
+                        id : data.id,
+                        isChecked: data.data().isChecked,
+                        name : data.data().name,
+                        time : data.data().time,
+                        snooze : data.data().snooze,
+                        notes : data.data().notes,
+                };
+                    medicines.push(meds);
+                });
+
+                observer.next(medicines);
+            });
+        });
+    }
 }
