@@ -13,40 +13,39 @@ import { AppRoutingModule } from './app-routing.module';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 
-import { AngularFireModule } from 'angularfire2'
-import { AngularFireAuthModule } from 'angularfire2/auth'
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireAuthModule } from 'angularfire2/auth';
 
 export const firebaseConfig = {
-    apiKey: "AIzaSyCmJN9aeUk2OccxSUaLcJwSP34oqmqjfkE",
-    authDomain: "medalert-fd67a.firebaseapp.com",
-    databaseURL: "https://medalert-fd67a.firebaseio.com",
-    projectId: "medalert-fd67a",
-    storageBucket: "medalert-fd67a.appspot.com",
-    messagingSenderId: "690959688562"
-}
+    apiKey: 'AIzaSyCmJN9aeUk2OccxSUaLcJwSP34oqmqjfkE',
+    authDomain: 'medalert-fd67a.firebaseapp.com',
+    databaseURL: 'https://medalert-fd67a.firebaseio.com',
+    projectId: 'medalert-fd67a',
+    storageBucket: 'medalert-fd67a.appspot.com',
+    messagingSenderId: '690959688562'
+};
 
 firebase.initializeApp(firebaseConfig);
 
 @NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
-  imports: [
-      BrowserModule,
-      IonicModule.forRoot(),
-      AppRoutingModule,
-      AngularFireModule.initializeApp(firebaseConfig),
-      
-      AngularFireAuthModule,
+    declarations: [AppComponent],
+    entryComponents: [],
+    imports: [
+        BrowserModule,
+        IonicModule.forRoot(),
+        AppRoutingModule,
+        AngularFireModule.initializeApp(firebaseConfig),
+        AngularFireAuthModule,
     ],
-  providers: [
-    StatusBar,
-    SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
-    GooglePlus,
-    AuthGuard,
-    AuthService,
-    MedicinesService,
-  ],
-  bootstrap: [AppComponent]
+    providers: [
+        StatusBar,
+        SplashScreen,
+        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+        GooglePlus,
+        AuthGuard,
+        AuthService,
+        MedicinesService,
+    ],
+    bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

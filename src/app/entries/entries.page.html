@@ -8,53 +8,87 @@
 </ion-header>
 
 <ion-content padding>
-        <form  (ngSubmit)="save()" >
-    <ion-item>
-        <ion-label position='floating'>
-            Name of your medicine
-        </ion-label>
-    
-        <ion-input name='name' [(ngModel)]="medicine.name"></ion-input>
-    
-    </ion-item>
-    <br>
+    <form (ngSubmit)="save()">
+        <ion-item>
+            <ion-label position='floating'>
+                Name of your medicine
+            </ion-label>
 
-    <!-- Datetime -->
+            <ion-input name='name' [(ngModel)]="medicine.name"></ion-input>
 
-    <ion-list-header>
-        <ion-label>
-            YOUR REMINDERS
-        </ion-label>
-    </ion-list-header>
+        </ion-item>
+        <br>
 
-    <ion-item  *ngFor="let time of medicine.time; let i =index">
-        <ion-label>Time {{i+1}}: </ion-label>
-        <ion-datetime [name]= '"datetime"+ i' displayFormat="h:mm A" minuteValues="0,15,30,45" [value]='time' (ionChange)='selected($event, i)'></ion-datetime>
-    </ion-item>
+        <!-- Datetime -->
 
-    <ion-button size="small" fill='clear' color='dark' expand="block" (click)='addTime()'>
-        <ion-icon slot="icon-only" name="add"></ion-icon>Add
-    </ion-button>
+        <ion-list-header>
+            <ion-label>
+                YOUR REMINDERS
+            </ion-label>
+        </ion-list-header>
 
-    <ion-item lines="none">
-        <ion-label>Snooze</ion-label>
-        <ion-input class='snooze' text-right inputmode="numeric" (click)='snoozeTime()' name='snooze' [(ngModel)]="medicine.snooze" readonly></ion-input>
-        <!-- <p slot='end' name= 'snooze' (click)='snoozeTime()'>{{medicine.snooze}}<small> minutes</small></p> -->
-    </ion-item>
-    
-    <!-- Datetime -->
+        <ion-list *ngFor="let time of medicine.time; let i =index">
+            
+                        <ion-item-sliding>
+                            <ion-item lines='none'>
+                                <ion-label>{{ i+1 }}. Notify at:</ion-label>
+                                <ion-datetime slot='end' [name]='"datetime"+ i' displayFormat="h:mm A"
+                                    minuteValues="0,15,30,45" [value]='time' (ionChange)='selected($event, i)'>
+                                </ion-datetime>
+                            </ion-item>
+                            <ion-item-options side="end">
+                                <ion-item-option (click)="removeTime(i)" color='danger'>
+                                    <ion-icon slot='icon-only' name="close"></ion-icon>
+                                </ion-item-option>
+                            </ion-item-options>
+                        </ion-item-sliding>
+                    <ion-item>
+                    <ion-radio-group>
+                       <ion-grid>
+                            <ion-row>
+                                <ion-col>
+                                    <ion-item lines='none'>
+                                        <ion-radio slot="start"></ion-radio>
+                                        <ion-label><small>Before meal</small></ion-label>
+                                    </ion-item>
+                                </ion-col>
+                                <ion-col>
+                                    <ion-item lines='none'>
+                                        <ion-radio slot="start"></ion-radio>
+                                        <ion-label><small>After meal</small></ion-label>
+                                    </ion-item>
+                                </ion-col>
+                                
+                            </ion-row>
+                        </ion-grid>
+                    </ion-radio-group>
+                </ion-item>
+        </ion-list>
+        
+        <ion-button size="small" fill='clear' color='dark' expand="block" (click)='addTime()'>
+            <ion-icon slot="icon-only" name="add"></ion-icon>Add
+        </ion-button>
 
-    <ion-list-header>
-        <ion-label>
-            NOTES
-        </ion-label>
-    </ion-list-header>
+        <ion-item lines="none">
+            <ion-label>Speak every: </ion-label>
+            <ion-input class='snooze' text-right inputmode="numeric" (click)='snoozeTime()' name='snooze'
+                [(ngModel)]="medicine.snooze" readonly></ion-input>
+            <!-- <p slot='end' name= 'snooze' (click)='snoozeTime()'>{{medicine.snooze}}<small> minutes</small></p> -->
+        </ion-item>
 
-    <ion-item>
-        <ion-textarea name = 'notes' rows="3" cols="20" placeholder="Enter any notes here..." [(ngModel)]='medicine.notes'></ion-textarea>
-    </ion-item>
+        <!-- Datetime -->
+        <ion-list-header>
+            <ion-label>
+                NOTES
+            </ion-label>
+        </ion-list-header>
 
-    <ion-button expand='block' type='submit' color='primary'>Save</ion-button>
-    <ion-button expand='block' type='submit' color='danger'>Delete</ion-button>
-</form>
+        <ion-item>
+            <ion-textarea name='notes' rows="3" cols="20" placeholder="Enter any notes here..."
+                [(ngModel)]='medicine.notes'></ion-textarea>
+        </ion-item>
+
+        <ion-button expand='block' type='submit' color='primary'>Save</ion-button><br>
+        <ion-button expand='block' color='danger' [disabled]='disableDelete' (click)='deleteEntry()'>Delete</ion-button>
+    </form>
 </ion-content>

@@ -4,7 +4,7 @@ import { MedicinesService } from './medicines.service';
 import { Medicine } from './medicines.interface';
 import { Component } from '@angular/core';
 import { OptionComponent } from '../settings/option/option.component';
-import { PopoverController } from '@ionic/angular';
+import { PopoverController, LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
 
 
@@ -21,8 +21,10 @@ export class HomePage {
 
     constructor(
         public popoverController: PopoverController,
-        public router: Router, public medicineService: MedicinesService,
+        public router: Router,
+        public medicineService: MedicinesService,
         public authService: AuthService,
+        public loadingController: LoadingController
     ) { }
 
     user = {
@@ -30,19 +32,23 @@ export class HomePage {
         email: '',
         photoURL: ''
     };
-
+private temp: Medicine[];
     async ionViewDidEnter() {
-        console.log('Entered Home!')
-        this.observable= this.medicineService.getMedicines().subscribe(res => {
-            this.medicines = res;
+        const loading = await this.loadingController.create();
+        loading.message = 'Getting your prescriptions';
+        await loading.present();
+        this.observable = this.medicineService.getMedicines().subscribe(res => {
+            this.temp = res;
+        }, e => {},
+        async () => {
+            this.medicines = this.temp;
+            await loading.dismiss();
         });
         this.user = this.authService.credentials();
     }
 
-    async ionViewWillLeave() {
-        await this.popoverController.dismiss(null, undefined).catch(e=>{
-            console.log(e);
-        });
+    async ionViewDidLeave() {
+        this.medicines = [];
         this.observable.unsubscribe();
     }
 
@@ -52,6 +58,7 @@ export class HomePage {
             event: ev,
             translucent: false
         });
+        popover.onclick = async () => await popover.dismiss();
         return await popover.present();
     }
 

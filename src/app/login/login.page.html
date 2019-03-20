@@ -1,29 +1,34 @@
 <ion-header>
     <ion-toolbar>
-      <ion-title>Login</ion-title>
+        <ion-title text-center>Sign In</ion-title>
     </ion-toolbar>
-  </ion-header>
-  
-  <ion-content padding>
-      <ion-item>
-          <ion-label position="floating" >Username or Email</ion-label>
-          <ion-input type="email" [(ngModel)]="username"></ion-input>
-      </ion-item>
-      <ion-item>
-          <ion-label position="floating">Password</ion-label>
-          <ion-input type="password" [(ngModel)]="password"></ion-input>
-      </ion-item>
-      <br>
-      <ion-button expand="full" (click)="emailSignIn()" >Sign in</ion-button>
-  <br>
-      <ion-button expand='full' (click)='facebookSignIn()'>
-          <ion-icon slot="start" name="logo-facebook"></ion-icon>
-          LOGIN WITH FACEBOOK
-      </ion-button>
-      <br>
-      <ion-button expand='full' (click)='googleSignIn()'>
-          <ion-icon slot="start" name="logo-google"></ion-icon>
-          LOGIN WITH GOOGLE
-      </ion-button>
-  </ion-content>
-  
+</ion-header>
+
+<ion-content padding>
+    <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input type="email" [(ngModel)]="username"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label position="floating">Password</ion-label>
+        <ion-input type="password" [(ngModel)]="password"></ion-input>
+    </ion-item>
+    <br>
+    <ion-button expand="full" color= 'primary' (click)="emailSignIn()"><ion-icon slot="start" name="key"></ion-icon> Sign in </ion-button>
+    <br>
+    <ion-button expand='full' color = 'danger' (click)='googleSignIn()'>
+        <ion-icon slot="start" name="logo-google"></ion-icon>
+        LOGIN WITH GOOGLE
+    </ion-button>
+    <br>
+    <ion-text>
+        <p text-center>or</p>
+    </ion-text>
+    <br>
+    <ion-button expand='full' color = 'dark' [routerLink]="['/signup']" >
+        <ion-icon slot="start" name="contact"></ion-icon>
+        CREATE AN ACCOUNT
+    </ion-button>
+
+
+</ion-content>

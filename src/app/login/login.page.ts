@@ -14,7 +14,7 @@ import 'firebase/auth';
     templateUrl: './login.page.html',
     styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class LoginPage {
 
     username: string;
     password: string;
@@ -34,26 +34,26 @@ export class LoginPage implements OnInit {
         });
     }
 
-    async ngOnInit() {
-        let myState = await this.authService.authenticated();
+    async ionViewWillEnter() {
+        const myState = await this.authService.authenticated();
         if (myState) { this.router.navigate(['/home']); }
     }
 
 
     async googleSignIn() {
-        let loading = await this.presentLoading();
-        loading.message = 'Logging in'
+        const loading = await this.presentLoading();
+        loading.message = 'Logging in';
         loading.present();
-        this.authService.signIn()
+        this.authService.googleSignIn()
             .then(() => {
                 loading.dismiss();
                 this.router.navigate(['/home']);
             })
             .catch(async err => {
                 await loading.dismiss();
-                let alert = await this.presentAlert();
+                const alert = await this.presentAlert();
                 alert.header = 'Error!';
-                alert.buttons=['Dismiss'];
+                alert.buttons = ['Dismiss'];
                 alert.message = err;
                 alert.present();
             });
@@ -61,8 +61,13 @@ export class LoginPage implements OnInit {
 
 
     emailSignIn() {
-        this.username = 'i pressed';
-        this.router.navigate(['/home']);
+        this.authService.emailSignIn(this.username, this.password)
+        .then(async() => {
+            this.router.navigate(['/home']);
+        })
+        .catch(e => {
+            console.log(e);
+        });
     }
 
     async facebookSignIn() {
