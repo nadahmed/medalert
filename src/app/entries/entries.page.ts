@@ -30,7 +30,7 @@ export class EntriesPage {
     medicines: Medicine[];
     times: string[];
     pb: PickerButton[];
-    medicine: Medicine = { id: '1', name: '', isChecked: true, time: [], snooze: 2, notes: '' };
+    medicine: Medicine = { id: '0', name: '', isChecked: true, time: [], notes: '' };
     picker: HTMLIonPickerElement;
 
 
@@ -48,7 +48,6 @@ export class EntriesPage {
                     name: res.name,
                     isChecked: res.isChecked,
                     time: res.time,
-                    snooze: res.snooze,
                     notes: res.notes,
                 };
                 this.medicine = obj;
@@ -58,10 +57,8 @@ export class EntriesPage {
                     await loading.dismiss();
                     this.disableDelete = false;
                     this.observable.unsubscribe();
-                    console.log(this.medicine.time);
                 }
             );
-            this.selection = this.medicine.snooze - 1;
 
         } else {
             this.disableDelete = true;
@@ -69,7 +66,7 @@ export class EntriesPage {
 
     }
     selected(ev, index) {
-        this.medicine.time[index] = ev.detail.value.toString();
+        this.medicine.time[index].time = ev.detail.value.toString();
     }
 
     ionViewWillLeave() {
@@ -87,38 +84,50 @@ export class EntriesPage {
 
         if (hours < 10) { hoursString = '0' + hoursString; }
         if (minutes < 10) { minutesString = '0' + minutesString; }
-
-        this.medicine.time.push(hoursString + ':' + minutesString);
+        const obj = { beforeMeal: true, time: hoursString + ':' + minutesString };
+        this.medicine.time.push(obj);
     }
 
-    removeTime(index){
+    removeTime(index) {
         this.medicine.time.splice(index, 1);
     }
 
+    mealHandler(ev, i) {
 
-    async snoozeTime() {
-        this.picker = await this.pickerController.create({
-            buttons: [{
-                text: 'Done',
-                handler: () => { this.pickerHandler(); return true; }
-            }],
-            columns: this.pickerOpts()
-        });
-        await this.picker.present();
-        this.picker.onDidDismiss().then(() => {
-            this.picker.getColumn('snooze')
-                .then((res) => {
-                    console.log(res);
-                    console.log(res.selectedIndex);
-                    if (this.donePressed) {
-                        // tslint:disable-next-line: radix
-                        this.medicine.snooze = parseInt(res.options[res.selectedIndex].value);
-                        this.donePressed = false;
-                        this.selection = res.selectedIndex;
-                    }
-                });
-        });
+        this.medicine.time[i].beforeMeal = ev.detail.value === 'true';
     }
+
+    toggleHandler(ev) {
+        if ('new' !== this.id) {
+        this.medicineService.updateToggle(this.medicine, ev.detail.checked);
+        } else {
+            this.medicine.isChecked = ev.detail.checked;
+        }
+     }
+
+    // async snoozeTime() {
+    //     this.picker = await this.pickerController.create({
+    //         buttons: [{
+    //             text: 'Done',
+    //             handler: () => { this.pickerHandler(); return true; }
+    //         }],
+    //         columns: this.pickerOpts()
+    //     });
+    //     await this.picker.present();
+    //     this.picker.onDidDismiss().then(() => {
+    //         this.picker.getColumn('snooze')
+    //             .then((res) => {
+    //                 console.log(res);
+    //                 console.log(res.selectedIndex);
+    //                 if (this.donePressed) {
+    //                     // tslint:disable-next-line: radix
+    //                     this.medicine.snooze = parseInt(res.options[res.selectedIndex].value);
+    //                     this.donePressed = false;
+    //                     this.selection = res.selectedIndex;
+    //                 }
+    //             });
+    //     });
+    // }
 
     pickerHandler() {
         this.donePressed = true;

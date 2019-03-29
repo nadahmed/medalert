@@ -15,15 +15,27 @@
 </ion-header>
 
 <ion-content padding>
-    
-    <ion-list>
+    <ion-card *ngFor="let entry of medicines; let i = index">
+        <ion-card-header>
+            <!-- <ion-card-subtitle>Your medicine is,</ion-card-subtitle> -->
+            <ion-card-title>{{entry.name}}</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+            <small>Notes: </small>{{entry.notes}}
+        </ion-card-content>
+        <ion-item>
+                <ion-button slot='end' fill='clear' color='dark' (click)='edit(entry)'><ion-icon slot='icon-only' name="create"></ion-icon></ion-button>
+        </ion-item>
+    </ion-card>
+    <!-- <ion-list>
         
             <ion-item *ngFor="let entry of medicines; let i = index">
                 <ion-toggle [name]='i' [(ngModel)] = 'entry.isChecked' (ionChange)='toggle(entry)'></ion-toggle>
                 <ion-label >{{entry.name}}</ion-label>
                 <ion-button slot='end' fill='clear' color='dark' (click)='edit(entry)'><ion-icon slot='icon-only' name="create"></ion-icon></ion-button>
             </ion-item>
-    </ion-list>
+    </ion-list> -->
     <ion-fab vertical="bottom" horizontal="end" slot='fixed'>
         <ion-fab-button (click)='fabButton()'>
             <ion-icon name="add"></ion-icon>

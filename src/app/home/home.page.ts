@@ -42,6 +42,7 @@ private temp: Medicine[];
         }, e => {},
         async () => {
             this.medicines = this.temp;
+            // console.log(this.medicines);
             await loading.dismiss();
         });
         this.user = this.authService.credentials();

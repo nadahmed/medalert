@@ -3,7 +3,9 @@
         <ion-buttons slot='start'>
             <ion-back-button defaultHref='/home'></ion-back-button>
         </ion-buttons>
-        <ion-title>Add medicine entries</ion-title>
+        <ion-title *ngIf='disableDelete'>Add medicine entries</ion-title>
+        <ion-title *ngIf="!disableDelete">{{ medicine.name }}</ion-title>
+        <ion-toggle slot ='end' color = 'danger' (ionChange)="toggleHandler($event)" [checked]='medicine.isChecked' ></ion-toggle>
     </ion-toolbar>
 </ion-header>
 
@@ -22,9 +24,11 @@
         <!-- Datetime -->
 
         <ion-list-header>
+            
             <ion-label>
                 YOUR REMINDERS
             </ion-label>
+           
         </ion-list-header>
 
         <ion-list *ngFor="let time of medicine.time; let i =index">
@@ -33,7 +37,7 @@
                             <ion-item lines='none'>
                                 <ion-label>{{ i+1 }}. Notify at:</ion-label>
                                 <ion-datetime slot='end' [name]='"datetime"+ i' displayFormat="h:mm A"
-                                    minuteValues="0,15,30,45" [value]='time' (ionChange)='selected($event, i)'>
+                                     [value]='time.time' (ionChange)='selected($event, i)'>
                                 </ion-datetime>
                             </ion-item>
                             <ion-item-options side="end">
@@ -43,18 +47,18 @@
                             </ion-item-options>
                         </ion-item-sliding>
                     <ion-item>
-                    <ion-radio-group>
+                    <ion-radio-group (ionChange)="mealHandler($event,i)">
                        <ion-grid>
                             <ion-row>
                                 <ion-col>
                                     <ion-item lines='none'>
-                                        <ion-radio slot="start"></ion-radio>
+                                        <ion-radio slot="start" value = 'true' [checked]='time.beforeMeal'></ion-radio>
                                         <ion-label><small>Before meal</small></ion-label>
                                     </ion-item>
                                 </ion-col>
                                 <ion-col>
                                     <ion-item lines='none'>
-                                        <ion-radio slot="start"></ion-radio>
+                                        <ion-radio slot="start" value = 'false' [checked]='!time.beforeMeal'></ion-radio>
                                         <ion-label><small>After meal</small></ion-label>
                                     </ion-item>
                                 </ion-col>
@@ -69,12 +73,11 @@
             <ion-icon slot="icon-only" name="add"></ion-icon>Add
         </ion-button>
 
-        <ion-item lines="none">
+        <!-- <ion-item lines="none">
             <ion-label>Speak every: </ion-label>
             <ion-input class='snooze' text-right inputmode="numeric" (click)='snoozeTime()' name='snooze'
                 [(ngModel)]="medicine.snooze" readonly></ion-input>
-            <!-- <p slot='end' name= 'snooze' (click)='snoozeTime()'>{{medicine.snooze}}<small> minutes</small></p> -->
-        </ion-item>
+        </ion-item> -->
 
         <!-- Datetime -->
         <ion-list-header>
